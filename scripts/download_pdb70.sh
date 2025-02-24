@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Downloads and unzips the PDB70 database for AlphaFold.
+# Downloads the PDB70 database for AlphaFold.
 #
 # Usage: bash download_pdb70.sh /path/to/download/directory
 set -e
@@ -36,6 +36,3 @@ BASENAME=$(basename "${SOURCE_URL}")
 
 mkdir --parents "${ROOT_DIR}"
 aria2c "${SOURCE_URL}" --dir="${ROOT_DIR}"
-tar --extract --verbose --file="${ROOT_DIR}/${BASENAME}" \
-  --directory="${ROOT_DIR}"
-rm "${ROOT_DIR}/${BASENAME}"

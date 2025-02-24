@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Downloads the UniRef90 database for AlphaFold.
+# Unzips the PDB SeqRes database for AlphaFold.
 #
-# Usage: bash download_uniref90.sh /path/to/download/directory
+# Usage: bash uncompress_pdb_seqres.sh /path/to/download/directory
 set -e
 
 if [[ $# -eq 0 ]]; then
@@ -24,15 +24,11 @@ if [[ $# -eq 0 ]]; then
     exit 1
 fi
 
-if ! command -v aria2c &> /dev/null ; then
-    echo "Error: aria2c could not be found. Please install aria2c (sudo apt install aria2)."
-    exit 1
-fi
-
 DOWNLOAD_DIR="$1"
-ROOT_DIR="${DOWNLOAD_DIR}/uniref90"
-SOURCE_URL="https://ftp.ebi.ac.uk/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz"
+ROOT_DIR="${DOWNLOAD_DIR}/pdb_seqres"
+SOURCE_URL="https://files.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt"
 BASENAME=$(basename "${SOURCE_URL}")
 
-mkdir --parents "${ROOT_DIR}"
-aria2c "${SOURCE_URL}" --dir="${ROOT_DIR}"
+# Keep only protein sequences.
+grep --after-context=1 --no-group-separator '>.* mol:protein' "${ROOT_DIR}/pdb_seqres.txt" > "${ROOT_DIR}/pdb_seqres_filtered.txt"
+mv "${ROOT_DIR}/pdb_seqres_filtered.txt" "${ROOT_DIR}/pdb_seqres.txt"

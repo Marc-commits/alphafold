@@ -14,19 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Downloads the SwissProt and TrEMBL databases for
+# Unzips and merges the SwissProt and TrEMBL databases for
 # AlphaFold-Multimer.
 #
-# Usage: bash download_uniprot.sh /path/to/download/directory
+# Usage: bash uncompress_uniprot.sh /path/to/download/directory
 set -e
 
 if [[ $# -eq 0 ]]; then
     echo "Error: download directory must be provided as an input argument."
-    exit 1
-fi
-
-if ! command -v aria2c &> /dev/null ; then
-    echo "Error: aria2c could not be found. Please install aria2c (sudo apt install aria2)."
     exit 1
 fi
 
@@ -41,6 +36,12 @@ SPROT_SOURCE_URL="https://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/kn
 SPROT_BASENAME=$(basename "${SPROT_SOURCE_URL}")
 SPROT_UNZIPPED_BASENAME="${SPROT_BASENAME%.gz}"
 
-mkdir --parents "${ROOT_DIR}"
-aria2c "${TREMBL_SOURCE_URL}" --dir="${ROOT_DIR}"
-aria2c "${SPROT_SOURCE_URL}" --dir="${ROOT_DIR}"
+pushd "${ROOT_DIR}"
+gunzip "${ROOT_DIR}/${TREMBL_BASENAME}"
+gunzip "${ROOT_DIR}/${SPROT_BASENAME}"
+
+# Concatenate TrEMBL and SwissProt, rename to uniprot and clean up.
+cat "${ROOT_DIR}/${SPROT_UNZIPPED_BASENAME}" >> "${ROOT_DIR}/${TREMBL_UNZIPPED_BASENAME}"
+mv "${ROOT_DIR}/${TREMBL_UNZIPPED_BASENAME}" "${ROOT_DIR}/uniprot.fasta"
+rm "${ROOT_DIR}/${SPROT_UNZIPPED_BASENAME}"
+popd

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Downloads and unzips the AlphaFold parameters.
+# Downloads the AlphaFold parameters.
 #
 # Usage: bash download_alphafold_params.sh /path/to/download/directory
 set -e
@@ -36,6 +36,3 @@ BASENAME=$(basename "${SOURCE_URL}")
 
 mkdir --parents "${ROOT_DIR}"
 aria2c "${SOURCE_URL}" --dir="${ROOT_DIR}"
-tar --extract --verbose --file="${ROOT_DIR}/${BASENAME}" \
-  --directory="${ROOT_DIR}" --preserve-permissions
-rm "${ROOT_DIR}/${BASENAME}"

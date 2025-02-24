@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Downloads and unzips the Uniclust30 database for AlphaFold.
+# Downloads the Uniclust30 database for AlphaFold.
 #
-# Usage: bash download_uniclust30.sh /path/to/download/directory
+# Usage: bash download_uniref30.sh /path/to/download/directory
 set -e
 
 if [[ $# -eq 0 ]]; then
@@ -38,6 +38,3 @@ BASENAME=$(basename "${SOURCE_URL}")
 
 mkdir --parents "${ROOT_DIR}"
 aria2c "${SOURCE_URL}" --dir="${ROOT_DIR}"
-tar --extract --verbose --file="${ROOT_DIR}/${BASENAME}" \
-  --directory="${ROOT_DIR}"
-rm "${ROOT_DIR}/${BASENAME}"
