@@ -1,0 +1,27 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+- repo: https://github.com/jumanjihouse/pre-commit-hooks
+  rev: 3.0.0
+  hooks:
+  -   id: shellcheck
+      name: Test shell scripts with shellcheck
+      description: Shell scripts conform to shellcheck
+      entry: pre_commit_hooks/shellcheck
+      language: script
+      files: ^scripts/
+      types: [shell]
+      args: ["-e", "SC1091"]
+  -   id: shfmt
+      name: Check shell style with shfmt
+      language: script
+      files: ^scripts/
+      entry: pre_commit_hooks/shfmt
+      types: [shell]
